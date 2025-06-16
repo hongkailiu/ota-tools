@@ -4,11 +4,13 @@ go 1.25.7
 
 require (
 	github.com/blang/semver/v4 v4.0.0
+	github.com/google/go-cmp v0.7.0
 	github.com/google/go-containerregistry v0.21.3
 	github.com/google/go-github/v60 v60.0.0
 	github.com/petr-muller/vibes v0.0.0-20260518143403-87f9112f605e
 	github.com/sirupsen/logrus v1.9.4
 	github.com/spf13/cobra v1.10.2
+	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.35.3
 	sigs.k8s.io/yaml v1.6.0
 )
@@ -33,6 +35,5 @@ require (
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gotest.tools/v3 v3.5.2 // indirect
 )
