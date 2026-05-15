@@ -1,4 +1,4 @@
-module github.com/hongkailiu/test-go
+module github.com/openshift-eng/ota-tools
 
 go 1.25.7
 
