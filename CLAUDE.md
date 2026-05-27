@@ -56,9 +56,6 @@ The primary tool in this repository validates OpenShift releases against the cin
 
 # Build with custom output directory
 OUT_DIR=/custom/path ./hack/build.sh
-
-# Build container image
-podman build -f images/validate-release/Containerfile -t validate-release:local .
 ```
 
 ### Testing
@@ -102,12 +99,6 @@ export PULL_NUMBER=1234
 
 # Run the built binary
 ./_out/validate-release
-
-# Or build and run in container
-podman run --rm \
-  -e PULL_BASE_REF=main \
-  -e PULL_NUMBER=1234 \
-  validate-release:local
 ```
 
 ## Key Dependencies
@@ -125,5 +116,4 @@ When adding a new command-line tool:
 1. Create a new directory under `cmd/{tool-name}/`
 2. Implement using Cobra CLI pattern (see validate-release for reference)
 3. Use `pkg/version` for version information
-4. Create corresponding Containerfile in `images/{tool-name}/` if containerization is needed
-5. The build script automatically discovers and builds all commands in `cmd/`
+4. The build script automatically discovers and builds all commands in `cmd/`
