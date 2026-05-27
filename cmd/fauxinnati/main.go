@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/petr-muller/vibes/pkg/fauxinnati"
+	"github.com/openshift-eng/ota-tools/pkg/fauxinnati"
 )
 
 var (

@@ -14,7 +14,7 @@ import (
 	"github.com/patrickmn/go-cache"
 	"github.com/sirupsen/logrus"
 
-	"github.com/petr-muller/vibes/pkg/version"
+	"github.com/openshift-eng/ota-tools/pkg/version"
 )
 
 type Client interface {

@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/petr-muller/vibes/pkg/testhelper"
+	"github.com/openshift-eng/ota-tools/pkg/testhelper"
 )
 
 func TestServer_Integration(t *testing.T) {
