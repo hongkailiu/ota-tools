@@ -131,4 +131,4 @@ make verify
 
 ## Target Repository
 
-This tool is designed specifically for validating releases in the [openshift/cincinnati-graph-data](https://github.com/openshift/cincinnati-graph-data) repository.
+This tool is designed specifically for validating releases in the [openshift/cincinnati-graph-data](https://github.com/openshift/cincinnati-graph-data) repository. It runs in a [presubmit](https://github.com/openshift/release/blob/d9a6ea580cef81c0c5754ac1455a9b08f3b8b517/ci-operator/config/openshift/cincinnati-graph-data/openshift-cincinnati-graph-data-master.yaml#L117) of the repo.
