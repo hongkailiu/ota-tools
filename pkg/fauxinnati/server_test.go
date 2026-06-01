@@ -64,20 +64,6 @@ func edgesFrom(graph Graph, version string) []string {
 	return toStrings(targetSemVers)
 }
 
-func conditionalEdgesTo(graph Graph, version string) []string {
-	edges := map[string][]ConditionalUpdateRisk{}
-
-	for _, edgeItem := range graph.ConditionalEdges {
-		for _, edge := range edgeItem.Edges {
-			if edge.To == version {
-				edges[edge.From] = append(edges[edge.From], edgeItem.Risks...)
-			}
-		}
-	}
-
-	return toStringsWithRisks(edges)
-}
-
 func conditionalEdgesFrom(graph Graph, version string) []string {
 	edges := map[string][]ConditionalUpdateRisk{}
 

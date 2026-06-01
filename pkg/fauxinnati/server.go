@@ -25,7 +25,6 @@ type Server struct {
 	mux              *http.ServeMux
 	digestResolver   DigestResolver
 	candidatesGetter *candidatesGetter
-	candidates       func(client Client, major, minor uint64) ([]semver.Version, error)
 	client           Client
 }
 
@@ -997,7 +996,7 @@ func (s *Server) graphToASCII(graph Graph) string {
 		if versionStr == "4.18.42" {
 			versionStr = "<strong>" + versionStr + "</strong>"
 		}
-		result.WriteString(fmt.Sprintf("  [%d] %s\n", i, versionStr))
+		fmt.Fprintf(&result, "  [%d] %s\n", i, versionStr)
 	}
 
 	// Show unconditional edges
@@ -1012,7 +1011,7 @@ func (s *Server) graphToASCII(graph Graph) string {
 			if toVersion == "4.18.42" {
 				toVersion = "<strong>" + toVersion + "</strong>"
 			}
-			result.WriteString(fmt.Sprintf("  %s → %s\n", fromVersion, toVersion))
+			fmt.Fprintf(&result, "  %s → %s\n", fromVersion, toVersion)
 		}
 	}
 
@@ -1029,7 +1028,7 @@ func (s *Server) graphToASCII(graph Graph) string {
 				if toVersion == "4.18.42" {
 					toVersion = "<strong>" + toVersion + "</strong>"
 				}
-				result.WriteString(fmt.Sprintf("  %s ⇢ %s", fromVersion, toVersion))
+				fmt.Fprintf(&result, "  %s ⇢ %s", fromVersion, toVersion)
 				if len(condEdge.Risks) > 0 {
 					var riskStrs []string
 					for _, risk := range condEdge.Risks {
@@ -1039,7 +1038,7 @@ func (s *Server) graphToASCII(graph Graph) string {
 						}
 					}
 					if len(riskStrs) > 0 {
-						result.WriteString(fmt.Sprintf(" [%s]", strings.Join(riskStrs, ", ")))
+						fmt.Fprintf(&result, " [%s]", strings.Join(riskStrs, ", "))
 					}
 				}
 				result.WriteString("\n")
@@ -1142,11 +1141,11 @@ func (s *Server) renderASCIIDAG(graph Graph) string {
 	var result strings.Builder
 	if len(multiParentNodes) > 0 {
 		result.WriteString("Complex DAG with multiple paths to same nodes:\n\n")
-		result.WriteString(fmt.Sprintf("Cannot visualize as tree - nodes with multiple parents: %s\n\n",
-			strings.Join(multiParentNodes, ", ")))
+		fmt.Fprintf(&result, "Cannot visualize as tree - nodes with multiple parents: %s\n\n",
+			strings.Join(multiParentNodes, ", "))
 		result.WriteString("Graph summary:\n")
-		result.WriteString(fmt.Sprintf("- %d nodes, %d unconditional edges, %d conditional edge groups\n",
-			len(graph.Nodes), len(graph.Edges), len(graph.ConditionalEdges)))
+		fmt.Fprintf(&result, "- %d nodes, %d unconditional edges, %d conditional edge groups\n",
+			len(graph.Nodes), len(graph.Edges), len(graph.ConditionalEdges))
 
 		// Show key nodes
 		result.WriteString("- Key nodes: ")
@@ -1339,7 +1338,9 @@ func (s *Server) handleRoot(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	html := s.generateRootHTML(r.Host)
-	w.Write([]byte(html))
+	if _, err := w.Write([]byte(html)); err != nil {
+		logrus.WithError(err).Error("Failed to write HTML response")
+	}
 }
 
 func (s *Server) handleHealthz(w http.ResponseWriter, r *http.Request) {
@@ -1374,7 +1375,9 @@ func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK"))
+	if _, err := w.Write([]byte("OK")); err != nil {
+		logrus.WithError(err).Error("Failed to write health check response")
+	}
 }
 
 func (s *Server) handleVersion(w http.ResponseWriter, r *http.Request) {
