@@ -1,32 +1,17 @@
 # Build stage
-FROM docker.io/library/golang:1.25-alpine AS builder
-
-# Set working directory
-WORKDIR /app
-
-# Copy go mod and sum files
-COPY go.mod go.sum ./
-
-# Download dependencies
-RUN go mod download
+FROM registry.access.redhat.com/ubi9/go-toolset:9.7 AS builder
 
 # Copy source code
-COPY . .
-
-# Add dependencies for the build
-RUN apk --no-cache add git
+COPY --chown=1001:0 . .
 
 # Build the binary
-RUN ./scripts/build.sh
+RUN OUT_DIR=/tmp hack/build.sh
 
 # Runtime stage
-FROM docker.io/library/alpine:latest
-
-# Install ca-certificates for HTTPS calls
-RUN apk --no-cache add ca-certificates
+FROM registry.access.redhat.com/ubi9-minimal:9.7
 
 # Copy the binary from builder stage
-COPY --from=builder /app/fauxinnati /usr/local/bin/fauxinnati
+COPY --from=builder /tmp/fauxinnati /usr/local/bin/fauxinnati
 
 # Expose port 8080
 EXPOSE 8080

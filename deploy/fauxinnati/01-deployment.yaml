@@ -6,7 +6,7 @@ parameters:
 - name: IMAGE_DIGEST
   description: "Digest-tagged container image for fauxinnati"
   required: true
-  value: "quay.io/petr-muller/fauxinnati:latest"
+  value: "quay.io/openshift-ota/fauxinnati:e8752cc"
 objects:
 - apiVersion: apps/v1
   kind: Deployment

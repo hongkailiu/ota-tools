@@ -25,3 +25,19 @@ lint:
 	which golangci-lint || go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.3
 	golangci-lint run
 .PHONY: lint
+
+FAUXINNATI_IMAGE ?= "quay.io/openshift-ota/fauxinnati:e8752cc"
+
+# Deploy fauxinnati to OpenShift
+build-fauxinnati-image:
+	hack/build-fauxinnati-image.sh
+.PHONY: build-fauxinnati-image
+
+# Deploy fauxinnati to OpenShift
+deploy-fauxinnati:
+	image_digest=$(FAUXINNATI_IMAGE) hack/deploy-fauxinnati.sh
+.PHONY: deploy-fauxinnati
+
+refresh-fixture-inputs:
+	curl -s 'https://api.openshift.com/api/upgrades_info/graph?channel=candidate-4.20' > pkg/fauxinnati/testdata/zz_fixture_TestGraph_JSONcandidate_4.20.json.input
+.PHONY: refresh-fixture-inputs

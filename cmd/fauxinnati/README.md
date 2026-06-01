@@ -119,3 +119,24 @@ Generates a comprehensive 13-node graph exercising most Cincinnati features:
   - **RiskCNoMatch (PromQL vector(0))**: J→N, K→O with never-matching PromQL
   - **Combined risks**: L→P, M→P with all three risk types combined
 - **Purpose**: Comprehensive testing of graph traversal, risk evaluation, and complex conditional logic
+
+## Build the image
+
+Currently the image is built manually:
+
+> $ make build-fauxinnati-image
+
+An example of mirroring command:
+
+```console
+$ COMMIT_TAG=770bb81a oc image mirror --keep-manifest-list=true "quay.io/openshift-ota/fauxinnati:${COMMIT_TAG}" "quay.io/openshift-ota/fauxinnati:${COMMIT_TAG}" 
+```
+
+TODO: Build and promote the image in CI and https://docs.ci.openshift.org/how-tos/mirroring-to-quay/ it to `quay.io/openshift-ota/fauxinnati`.
+We could configure the [build](https://quay.io/repository/openshift-ota/fauxinnati?tab=builds) on "quay.io" if we can request the permission of `github.com/openshift-eng/ota-tools` to do so.
+
+## Deployment
+
+fauxinnati is deployed on [ota-stage](https://console-openshift-console.apps.ota-stage.q2z4.p1.openshiftapps.com/k8s/ns/fauxinnati/deployments). To bump it with a new image, we run the following command:  
+
+> $ FAUXINNATI_IMAGE="quay.io/openshift-ota/fauxinnati:e8752cc" make deploy-fauxinnati make deploy-fauxinnati
