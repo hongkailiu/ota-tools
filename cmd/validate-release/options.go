@@ -110,7 +110,7 @@ func (o *Options) Run(ctx context.Context) error {
 	}
 
 	if raw == nil {
-		return fmt.Errorf("failed to the content of the new candidate file to merge: %s", path)
+		return fmt.Errorf("failed to get the content to merge: %s", path)
 	}
 
 	var pullCandidate Candidate
